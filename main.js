@@ -32,9 +32,9 @@ class Renderer {
 			  void main() {
 				float count = texture2D(uTexture, vUv).x;
 				vec4 col = vec4(0,0,0,1);
-				col.x = count * (5. + 20.*gl_FragCoord.x / screen.x);
-				col.y = count * (5. + 20.*gl_FragCoord.y / screen.y);
-				col.z = count * (5. + 20.*(1.-gl_FragCoord.y / screen.y));
+				col.r = count * (5. + 20.*gl_FragCoord.x / screen.x);
+				col.b = count * (5. + 20.*gl_FragCoord.y / screen.y);
+				col.g = count * (5. + 20.*(1.-gl_FragCoord.y / screen.y));
 				gl_FragColor = col;
 			  }
 		  `,
