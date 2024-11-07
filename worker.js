@@ -1,7 +1,4 @@
-console.log("worker created");
-
 let state = null;
-let activeGrid = null;
 // I don't make trash
 let cacher = {
   x: 0,
@@ -14,12 +11,15 @@ const simulate = (state, update) => {
     particleOffsetStart,
     particleOffsetEnd,
     particleStride,
-    particleGridA,
-    particleGridB,
   } = state;
-  activeGrid = activeGrid === particleGridA ? particleGridB : particleGridA;
 
-  const { delta, width, height, touches } = update;
+  const {
+    delta,
+    width,
+    height,
+    touches,
+    particleGrid
+  } = update;
 
   const start = particleOffsetStart;
   const end = particleOffsetEnd;
@@ -55,7 +55,7 @@ const simulate = (state, update) => {
     if (x < 0 || x >= width) continue;
     if (y < 0 || y >= height) continue;
     const pCountIndex = (y | 0) * width + (x | 0);
-    activeGrid[pCountIndex]++;
+    particleGrid[pCountIndex]++;
   }
 
 };
