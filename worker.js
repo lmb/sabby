@@ -1,6 +1,6 @@
 console.log("worker created");
 
-let lastSetupEvent = null;
+let state = null;
 let activeGrid = null;
 // I don't make trash
 let cacher = {
@@ -8,27 +8,18 @@ let cacher = {
   y: 0,
 };
 
-const simulate = (event) => {
+const simulate = (state, update) => {
   const {
     sabViewParticles,
-    sabViewSimData,
-    id,
     particleOffsetStart,
     particleOffsetEnd,
     particleStride,
     particleGridA,
     particleGridB,
-  } = event.data;
+  } = state;
   activeGrid = activeGrid === particleGridA ? particleGridB : particleGridA;
 
-  const [delta, width, height, touchCount] = [
-    sabViewSimData[0],
-    sabViewSimData[1],
-    sabViewSimData[2],
-    sabViewSimData[3],
-    sabViewSimData[4],
-    sabViewSimData[5],
-  ];
+  const { delta, width, height, touches } = update;
 
   const start = particleOffsetStart;
   const end = particleOffsetEnd;
@@ -42,14 +33,12 @@ const simulate = (event) => {
     let sx = sabViewParticles[pi + 4];
     let sy = sabViewParticles[pi + 5];
 
-    if (touchCount > 0) {
-      for (let t = 0; t < touchCount; t++) {
-        const tx = sabViewSimData[4 + t * 2];
-        const ty = sabViewSimData[4 + t * 2 + 1];
-        forceInvSqr(tx, ty, x, y, 2583000 * 15);
-        dx += cacher.x * delta * 3;
-        dy += cacher.y * delta * 3;
-      }
+    for (let touch of touches) {
+      const tx = touch.x;
+      const ty = touch.y;
+      forceInvSqr(tx, ty, x, y, 2583000 * 15);
+      dx += cacher.x * delta * 3;
+      dy += cacher.y * delta * 3;
     }
 
     forceSqr(sx, sy, x, y, 0.5);
@@ -69,7 +58,6 @@ const simulate = (event) => {
     activeGrid[pCountIndex]++;
   }
 
-  postMessage({});
 };
 
 function clamp(n) {
@@ -116,11 +104,11 @@ function forceSqr(x1, y1, x2, y2, d = 999999) {
 }
 
 onmessage = (event) => {
-  if (!event.data.sabViewParticles) {
-    simulate(lastSetupEvent);
-    return;
+  if (state) {
+    simulate(state, event.data);
+  } else {
+    state = event.data;
   }
 
-  lastSetupEvent = event;
   postMessage({});
 };
