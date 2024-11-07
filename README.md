@@ -1,7 +1,5 @@
-# Bun Starter
+# sabby
 
-Quickly get started with [Bun](https://bun.sh/) using this starter! Bun is a fast all-in-one JavaScript runtime with a focus on speed.
+This is a fork of [sabby] by dgerrels. I've refactored the code a bit to make it easier to understand for myself.
 
-- This starter starts a Bun HTTP server on [localhost:3000](http://localhost:3000).
-- You can check [http.ts](./http.ts) to see how the server is started.
-- If you want to upgrade Bun, you can change `BUN_VERSION` in the [Dockerfile](./.devcontainer/Dockerfile).
+[sabby]: https://dgerrells.com/blog/how-fast-is-javascript-simulating-20-000-000-particles
